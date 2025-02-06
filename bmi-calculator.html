@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="정확한 비만도 계산기를 제공합니다. 키와 몸무게를 입력하여 쉽고 빠르게 비만도를 계산하고, 비만도 계산 방법과 관련된 다양한 정보도 확인하세요.">
+    <title>비만도 계산기 - 정확하고 빠른 비만도 계산 방법 제공</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* 추가적인 스타일 (선택 사항) */
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 비만도 계산 함수
+            function calculateBMI() {
+                const height = parseFloat(document.getElementById('height').value) / 100; // cm를 m로 변환
+                const weight = parseFloat(document.getElementById('weight').value);
+
+                if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+                    alert('유효한 키와 몸무게를 입력해주세요.');
+                    return;
+                }
+
+                const bmi = weight / (height * height);
+                const bmiRounded = bmi.toFixed(2); // 소수점 둘째 자리까지 반올림
+
+                let result = `당신의 BMI는 ${bmiRounded} 입니다.`;
+                let interpretation = '';
+
+                if (bmi < 18.5) {
+                    interpretation = '저체중';
+                } else if (bmi < 23) {
+                    interpretation = '정상';
+                } else if (bmi < 25) {
+                    interpretation = '과체중';
+                } else if (bmi < 30) {
+                    interpretation = '경도 비만';
+                } else if (bmi < 35) {
+                    interpretation = '중등도 비만';
+                } else {
+                    interpretation = '고도 비만';
+                }
+
+                document.getElementById('result').textContent = result + ` (${interpretation})`;
+            }
+
+            // 계산 버튼 클릭 이벤트 리스너
+            document.getElementById('calculateButton').addEventListener('click', calculateBMI);
+        });
+    </script>
+</head>
+
+<body class="bg-gray-100 font-sans ">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <nav class="container py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-semibold text-gray-800">인생유틸</a>
+                <ul class="flex space-x-6">
+                    <li><a href="/" class="text-gray-600 hover:text-gray-800">홈</a></li>
+                    <li><a href="/bmi-calculator.html" class="text-gray-600 hover:text-gray-800">비만도 계산기</a></li>
+                    <!-- 추후 추가될 페이지를 위한 자리 -->
+                    <li><a href="#" class="text-gray-600 hover:text-gray-800">메뉴 3</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-gray-800">메뉴 4</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-12 flex items-center justify-center h-screen">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+            <!-- 비만도 계산 -->
+            <h2 class="text-2xl font-bold mb-6 text-center">비만도 계산</h2>
+
+            <p>비만도 계산기는 키와 몸무게를 기준으로 BMI(Body Mass Index)를 계산하여 비만도를 측정하는 도구입니다. 자신의 건강 상태를 쉽고 빠르게 확인해 보세요.</p>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="height">
+                    키 (cm):
+                </label>
+                <input type="number" id="height"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="키를 입력하세요 (cm)">
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="weight">
+                    몸무게 (kg):
+                </label>
+                <input type="number" id="weight"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="몸무게를 입력하세요 (kg)">
+            </div>
+
+            <div class="flex items-center justify-between">
+                <button id="calculateButton"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="button">
+                    계산
+                </button>
+            </div>
+
+            <div class="mt-6">
+                <p class="text-gray-700 font-bold">결과:</p>
+                <p id="result" class="text-lg"></p>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container text-center">
+            <p>&copy; 2024 나의 웹사이트. All rights reserved.</p>
+            <p>
+                <a href="/privacy" class="text-gray-300 hover:text-white">개인정보처리방침</a> |
+                <a href="/terms" class="text-gray-300 hover:text-white">이용약관</a> |
+                <a href="/contact" class="text-gray-300 hover:text-white">문의하기</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
