@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="다양한 날짜 계산기를 제공합니다.">
+  <title>날짜 계산기</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <style>
+    /* 추가적인 스타일 (선택 사항) */
+    .container {
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Datepicker 초기화
+      flatpickr("#startDate", {
+        dateFormat: "Y-m-d",
+      });
+      flatpickr("#endDate", {
+        dateFormat: "Y-m-d",
+      });
+      flatpickr("#fromDate", {
+        dateFormat: "Y-m-d",
+      });
+      // 일수 계산 함수
+      function calculateDays() {
+        const startDate = new Date(document.getElementById('startDate').value);
+        const endDate = new Date(document.getElementById('endDate').value);
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+          alert("유효한 날짜를 선택해주세요.");
+          return;
+        }
+        const timeDiff = endDate.getTime() - startDate.getTime();
+        const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        document.getElementById('dayDifferenceResult').textContent = `총 ${dayDiff}일 입니다.`;
+      }
+      // 특정 날짜로부터 며칠 후 계산 함수
+      function calculateFutureDate() {
+        const fromDate = new Date(document.getElementById('fromDate').value);
+        const daysToAdd = parseInt(document.getElementById('daysToAdd').value);
+        if (isNaN(fromDate.getTime()) || isNaN(daysToAdd)) {
+          alert("유효한 날짜와 일수를 입력해주세요.");
+          return;
+        }
+        const futureDate = new Date(fromDate.getTime() + (daysToAdd * 24 * 60 * 60 * 1000));
+        const year = futureDate.getFullYear();
+        const month = String(futureDate.getMonth() + 1).padStart(2, '0');
+        const day = String(futureDate.getDate()).padStart(2, '0');
+        document.getElementById('futureDateResult').textContent = `${year}년 ${month}월 ${day}일`;
+      }
+      // 이벤트 리스너 등록
+      document.getElementById('calculateDaysButton').addEventListener('click', calculateDays);
+      document.getElementById('calculateFutureDateButton').addEventListener('click', calculateFutureDate);
+    });
+  </script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md">
+    <nav class="container py-4">
+      <div class="flex items-center justify-between">
+        <a href="/web-static/index.html" class="text-2xl font-semibold text-gray-800">인생유틸</a>
+        <ul class="flex space-x-6">
+          <li><a href="/web-static/index.html" class="text-gray-600 hover:text-gray-800">홈</a></li>
+          <li><a href="/web-static/real-age-calculator.html" class="text-gray-600 hover:text-gray-800">만 나이 계산기</a></li>
+          <li><a href="/web-static/bmi-calculator.html" class="text-gray-600 hover:text-gray-800">비만도 계산기</a></li>
+          <li><a href="/web-static/date-calculator.html" class="text-gray-600 hover:text-gray-800">날짜 계산기</a></li>
+          <li><a href="#" class="text-gray-600 hover:text-gray-800">메뉴 3</a></li>
+          <li><a href="#" class="text-gray-600 hover:text-gray-800">메뉴 4</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- 날짜 간 일수 계산 -->
+      <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h2 class="text-xl font-bold mb-4">날짜 간 일수 계산</h2>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="startDate">
+            시작일:
+          </label>
+          <input type="text" id="startDate"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="시작일 선택">
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="endDate">
+            종료일:
+          </label>
+          <input type="text" id="endDate"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="종료일 선택">
+        </div>
+        <div class="flex items-center justify-between">
+          <button id="calculateDaysButton"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button">
+            계산
+          </button>
+        </div>
+        <div class="mt-4">
+          <p class="text-gray-700 font-bold">결과:</p>
+          <p id="dayDifferenceResult" class="text-lg"></p>
+        </div>
+      </div>
+
+      <!-- 특정 날짜로부터 며칠 후 계산 -->
+      <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h2 class="text-xl font-bold mb-4">특정 날짜로부터 며칠 후 계산</h2>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="fromDate">
+            기준 날짜:
+          </label>
+          <input type="text" id="fromDate"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="기준 날짜 선택">
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="daysToAdd">
+            더할 일수:
+          </label>
+          <input type="number" id="daysToAdd"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="더할 일수 입력">
+        </div>
+        <div class="flex items-center justify-between">
+          <button id="calculateFutureDateButton"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button">
+            계산
+          </button>
+        </div>
+        <div class="mt-4">
+          <p class="text-gray-700 font-bold">결과:</p>
+          <p id="futureDateResult" class="text-lg"></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="container text-center">
+      <p>&copy; 2024 나의 웹사이트. All rights reserved.</p>
+      <p>
+        <a href="/privacy" class="text-gray-300 hover:text-white">개인정보처리방침</a> |
+        <a href="/terms" class="text-gray-300 hover:text-white">이용약관</a> |
+        <a href="/contact" class="text-gray-300 hover:text-white">문의하기</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+
+</html>
