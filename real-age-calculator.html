@@ -4,140 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>만 나이 계산기</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 현재 날짜를 계산 기준일로 설정
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+            const day = String(today.getDate()).padStart(2, '0');
 
-        .calculator {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 400px;
-        }
+            document.getElementById('currentYear').textContent = year;
+            document.getElementById('currentMonth').textContent = month;
+            document.getElementById('currentDay').textContent = day;
 
-        .calculator h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+            // 만 나이 계산 함수
+            function calculateAge() {
+                const birthYear = parseInt(document.getElementById('birthYear').value);
+                const birthMonth = parseInt(document.getElementById('birthMonth').value);
+                const birthDay = parseInt(document.getElementById('birthDay').value);
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+                const currentYear = year;
+                const currentMonth = parseInt(month);
+                const currentDay = parseInt(day);
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+                let age = currentYear - birthYear;
 
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+                if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+                    age--;
+                }
 
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+                document.getElementById('result').textContent = `당신은 만 ${age}세 입니다.`;
+            }
 
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        #result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            background-color: #f8f9fa;
-            text-align: center;
-        }
-    </style>
+            // 계산 버튼 클릭 이벤트 리스너
+            document.getElementById('calculateButton').addEventListener('click', calculateAge);
+        });
+    </script>
 </head>
-<body>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">만 나이 계산</h2>
 
-<div class="calculator">
-    <h2>만 나이 계산기</h2>
+        <!-- 계산 기준일 -->
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="calculationDate">
+                계산 기준일:
+            </label>
+            <div class="flex items-center space-x-2">
+              <span id="currentYear"></span>년
+              <span id="currentMonth"></span>월
+              <span id="currentDay"></span>일
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="standardYear">계산 기준일</label>
-        <select id="standardYear"></select> 년
-        <select id="standardMonth"></select> 월
-        <select id="standardDay"></select> 일
+        <!-- 본인 생일 -->
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="birthYear">
+                본인 생일:
+            </label>
+            <div class="flex space-x-2">
+                <select id="birthYear" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <!-- 1900년부터 현재 년도까지 선택 가능 -->
+                    <script>
+                        const currentYear = new Date().getFullYear();
+                        for (let i = currentYear; i >= 1900; i--) {
+                            document.write(`<option value="${i}">${i}년</option>`);
+                        }
+                    </script>
+                </select>
+                <select id="birthMonth" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <script>
+                        for (let i = 1; i <= 12; i++) {
+                            document.write(`<option value="${i}">${i}월</option>`);
+                        }
+                    </script>
+                </select>
+                <select id="birthDay" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <script>
+                        for (let i = 1; i <= 31; i++) {
+                            document.write(`<option value="${i}">${i}일</option>`);
+                        }
+                    </script>
+                </select>
+            </div>
+            <p class="text-gray-600 text-xs italic">* 주민등록상 생년월일을 기준으로 합니다.</p>
+        </div>
+
+        <!-- 계산 버튼 -->
+        <div class="flex items-center justify-between">
+            <button id="calculateButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                계산
+            </button>
+        </div>
+
+        <!-- 결과 -->
+        <div class="mt-6">
+            <p class="text-gray-700 font-bold">결과:</p>
+            <p id="result" class="text-lg"></p>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label for="birthYear">본인 생일</label>
-        <select id="birthYear"></select> 년
-        <select id="birthMonth"></select> 월
-        <select id="birthDay"></select> 일
-        <p style="font-size: small;">* 주민등록상 생년월일을 기준으로 합니다</p>
-    </div>
-
-    <button class="btn" onclick="calculateAge()">계산</button>
-
-    <div id="result"></div>
-</div>
-
-<script>
-    // 년도, 월, 일 옵션 생성 함수
-    function populateOptions(selectElement, start, end) {
-        for (let i = start; i <= end; i++) {
-            const option = document.createElement("option");
-            option.value = i;
-            option.text = i;
-            selectElement.add(option);
-        }
-    }
-
-    // 현재 년도를 기준으로 년도 옵션 설정
-    const currentYear = new Date().getFullYear();
-    populateOptions(document.getElementById("standardYear"), 1900, currentYear + 10);
-    populateOptions(document.getElementById("birthYear"), 1900, currentYear);
-
-    // 월 옵션 설정 (1 ~ 12)
-    populateOptions(document.getElementById("standardMonth"), 1, 12);
-    populateOptions(document.getElementById("birthMonth"), 1, 12);
-
-    // 일 옵션 설정 (1 ~ 31)
-    populateOptions(document.getElementById("standardDay"), 1, 31);
-    populateOptions(document.getElementById("birthDay"), 1, 31);
-
-    function calculateAge() {
-        const standardYear = parseInt(document.getElementById("standardYear").value);
-        const standardMonth = parseInt(document.getElementById("standardMonth").value);
-        const standardDay = parseInt(document.getElementById("standardDay").value);
-        const birthYear = parseInt(document.getElementById("birthYear").value);
-        const birthMonth = parseInt(document.getElementById("birthMonth").value);
-        const birthDay = parseInt(document.getElementById("birthDay").value);
-
-        let age = standardYear - birthYear;
-
-        if (standardMonth < birthMonth || (standardMonth === birthMonth && standardDay < birthDay)) {
-            age--;
-        }
-
-        document.getElementById("result").innerText = `당신은 만 ${age}세 입니다`;
-    }
-</script>
-
 </body>
 </html>
