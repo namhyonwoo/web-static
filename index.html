@@ -119,6 +119,140 @@
             </a>
         </div>
         
+        <!-- Cat Jump Game -->
+        <div class="mt-12">
+            <h2 class="text-2xl font-bold mb-6 text-center">고양이 장애물 피하기</h2>
+            <div class="flex justify-center">
+                <div class="relative">
+                    <canvas id="gameCanvas" width="800" height="400" class="border border-gray-300 rounded-lg"></canvas>
+                    <div id="score" class="absolute top-4 left-4 text-xl font-bold">점수: 0</div>
+                    <div id="gameOver" class="hidden absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div class="text-white text-center">
+                            <h3 class="text-2xl font-bold mb-4">게임 오버!</h3>
+                            <p id="finalScore" class="text-xl mb-4">최종 점수: 0</p>
+                            <button onclick="startGame()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                다시 시작
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            const catImg = new Image();
+            catImg.src = 'https://raw.githubusercontent.com/namhyonwoo/web-static/main/asset/cat.jpg';
+
+            let cat = {
+                x: 50,
+                y: canvas.height - 100,
+                width: 50,
+                height: 50,
+                velocity: 0,
+                jumping: false
+            };
+
+            let obstacles = [];
+            let score = 0;
+            let gameActive = true;
+            const gravity = 0.8;
+            const jumpForce = -15;
+
+            function startGame() {
+                cat.y = canvas.height - 100;
+                cat.velocity = 0;
+                cat.jumping = false;
+                obstacles = [];
+                score = 0;
+                gameActive = true;
+                document.getElementById('gameOver').classList.add('hidden');
+                document.getElementById('score').textContent = '점수: 0';
+                animate();
+            }
+
+            function createObstacle() {
+                const height = Math.random() * 100 + 50;
+                obstacles.push({
+                    x: canvas.width,
+                    y: canvas.height - height,
+                    width: 30,
+                    height: height
+                });
+            }
+
+            canvas.addEventListener('click', () => {
+                if (gameActive) {
+                    cat.velocity = jumpForce;
+                    cat.jumping = true;
+                }
+            });
+
+            function checkCollision(rect1, rect2) {
+                return rect1.x < rect2.x + rect2.width &&
+                    rect1.x + rect1.width > rect2.x &&
+                    rect1.y < rect2.y + rect2.height &&
+                    rect1.y + rect1.height > rect2.y;
+            }
+
+            function gameOverScreen() {
+                gameActive = false;
+                document.getElementById('gameOver').classList.remove('hidden');
+                document.getElementById('finalScore').textContent = `최종 점수: ${score}`;
+            }
+
+            function animate() {
+                if (!gameActive) return;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 고양이 물리 계산
+                if (cat.jumping) {
+                    cat.velocity += gravity;
+                    cat.y += cat.velocity;
+
+                    if (cat.y > canvas.height - 100) {
+                        cat.y = canvas.height - 100;
+                        cat.jumping = false;
+                        cat.velocity = 0;
+                    }
+                }
+
+                // 고양이 그리기
+                ctx.drawImage(catImg, cat.x, cat.y, cat.width, cat.height);
+
+                // 장애물 생성 및 이동
+                if (Math.random() < 0.02) {
+                    createObstacle();
+                }
+
+                obstacles.forEach((obstacle, index) => {
+                    obstacle.x -= 5;
+                    ctx.fillStyle = '#4A5568';
+                    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+                    // 충돌 체크
+                    if (checkCollision(cat, obstacle)) {
+                        gameOverScreen();
+                    }
+
+                    // 점수 계산
+                    if (obstacle.x + obstacle.width < cat.x && !obstacle.passed) {
+                        score++;
+                        obstacle.passed = true;
+                        document.getElementById('score').textContent = `점수: ${score}`;
+                    }
+                });
+
+                // 화면 밖으로 나간 장애물 제거
+                obstacles = obstacles.filter(obs => obs.x + obs.width > 0);
+
+                requestAnimationFrame(animate);
+            }
+
+            catImg.onload = startGame;
+        </script>
     </main>
 
     <!-- Footer -->
