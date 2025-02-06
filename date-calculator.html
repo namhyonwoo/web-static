@@ -18,15 +18,22 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
   <style>
-    /* 추가적인 스타일 (선택 사항) */
     .container {
-      max-width: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 1rem;
-      padding-right: 1rem;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
-  </style>
+    body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    main {
+        flex: 1;
+    }
+</style>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -168,7 +175,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-6">
+  <footer class="bg-gray-800 text-white py-6 mt-auto">
     <div class="container text-center">
       <p>&copy; 2025 인생유틸. All rights reserved.</p>
       <p>
