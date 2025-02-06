@@ -117,8 +117,128 @@
                     <p class="text-gray-700">특정 날짜로부터 며칠 후, 혹은 두 날짜 사이의 간격을 계산해보세요.</p>
                 </div>
             </a>
-
         </div>
+        
+        <!-- Cat Jump Game -->
+        <div class="mt-12 bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold mb-4 text-center">고양이 장애물 피하기</h2>
+            <p class="text-center mb-4">버튼을 클릭하여 고양이를 점프시키고 장애물을 피하세요!</p>
+            
+            <div class="relative w-full h-64 bg-blue-100 overflow-hidden rounded-lg">
+                <div id="cat" class="absolute bottom-0 left-12 transition-all duration-300">
+                    <img src="https://raw.githubusercontent.com/namhyonwoo/refs/main/cat.png" alt="고양이" class="w-12 h-12">
+                </div>
+                <div id="obstacle" class="absolute bottom-0 right-0">
+                    <div class="w-8 h-16 bg-red-500 rounded"></div>
+                </div>
+                <div class="absolute top-4 left-4 text-lg font-bold" id="score">점수: 0</div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button id="jumpButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    점프!
+                </button>
+                <button id="restartButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2 hidden">
+                    다시하기
+                </button>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const cat = document.getElementById('cat');
+                const obstacle = document.getElementById('obstacle');
+                const jumpButton = document.getElementById('jumpButton');
+                const restartButton = document.getElementById('restartButton');
+                const scoreElement = document.getElementById('score');
+                let isJumping = false;
+                let isGameOver = false;
+                let score = 0;
+                let gameLoop;
+
+                function jump() {
+                    if (!isJumping && !isGameOver) {
+                        isJumping = true;
+                        let position = 0;
+                        let jumpHeight = 120;
+                        let jumpUp = setInterval(() => {
+                            if (position >= jumpHeight) {
+                                clearInterval(jumpUp);
+                                let jumpDown = setInterval(() => {
+                                    if (position <= 0) {
+                                        clearInterval(jumpDown);
+                                        isJumping = false;
+                                    }
+                                    position -= 3;
+                                    cat.style.bottom = position + 'px';
+                                }, 10);
+                            }
+                            position += 3;
+                            cat.style.bottom = position + 'px';
+                        }, 10);
+                    }
+                }
+
+                function moveObstacle() {
+                    let position = 400;
+                    obstacle.style.right = '0px';
+                    
+                    gameLoop = setInterval(() => {
+                        if (position < -50) {
+                            position = 400;
+                            score += 1;
+                            scoreElement.textContent = `점수: ${score}`;
+                        }
+
+                        // 충돌 감지
+                        const catRect = cat.getBoundingClientRect();
+                        const obstacleRect = obstacle.getBoundingClientRect();
+
+                        if (
+                            catRect.right > obstacleRect.left &&
+                            catRect.left < obstacleRect.right &&
+                            catRect.bottom > obstacleRect.top
+                        ) {
+                            gameOver();
+                        }
+
+                        position -= 2;
+                        obstacle.style.right = position + 'px';
+                    }, 10);
+                }
+
+                function gameOver() {
+                    isGameOver = true;
+                    clearInterval(gameLoop);
+                    restartButton.classList.remove('hidden');
+                    jumpButton.classList.add('hidden');
+                    alert(`게임 오버! 점수: ${score}`);
+                }
+
+                function restartGame() {
+                    isGameOver = false;
+                    score = 0;
+                    scoreElement.textContent = '점수: 0';
+                    cat.style.bottom = '0px';
+                    obstacle.style.right = '0px';
+                    restartButton.classList.add('hidden');
+                    jumpButton.classList.remove('hidden');
+                    moveObstacle();
+                }
+
+                // 이벤트 리스너 설정
+                jumpButton.addEventListener('click', jump);
+                restartButton.addEventListener('click', restartGame);
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space') {
+                        jump();
+                    }
+                });
+
+                // 게임 시작
+                moveObstacle();
+            });
+        </script>
     </main>
 
     <!-- Footer -->
