@@ -258,7 +258,7 @@
 
         let cat = {
           x: 50,
-          y: canvas.height - 100,
+          y: canvas.height - 70,
           width: 50,
           height: 50,
           velocity: 0,
@@ -266,18 +266,29 @@
         };
 
         let obstacles = [];
+        let clouds = [];
+        let birds = [];
+        let leaves = [];
         let score = 0;
         let gameActive = true;
         const gravity = 0.8;
         const jumpForce = -15;
 
+        // 풀밭 설정
+        const grassHeight = 20;
+        let grassOffset = 0;
+
         function startGame() {
-          cat.y = canvas.height - 100;
+          cat.y = canvas.height - 70;
           cat.velocity = 0;
           cat.jumping = false;
           obstacles = [];
+          clouds = [];
+          birds = [];
+          leaves = [];
           score = 0;
           gameActive = true;
+          grassOffset = 0;
           document.getElementById("gameOver").classList.add("hidden");
           document.getElementById("score").textContent = "점수: 0";
           animate();
@@ -290,6 +301,33 @@
             y: canvas.height - height,
             width: 30,
             height: height,
+          });
+        }
+
+        function createCloud() {
+          clouds.push({
+            x: canvas.width,
+            y: Math.random() * 100,
+            width: 60,
+            height: 30,
+          });
+        }
+
+        function createBird() {
+          birds.push({
+            x: canvas.width,
+            y: Math.random() * 150,
+            width: 30,
+            height: 20,
+          });
+        }
+
+        function createLeaf() {
+          leaves.push({
+            x: canvas.width,
+            y: Math.random() * 200,
+            width: 20,
+            height: 20,
           });
         }
 
@@ -317,6 +355,33 @@
           ).textContent = `최종 점수: ${score}`;
         }
 
+        function drawCloud(cloud) {
+          ctx.fillStyle = "#D3D3D3";
+          ctx.beginPath();
+          ctx.arc(cloud.x, cloud.y, 20, Math.PI * 0.5, Math.PI * 1.5);
+          ctx.arc(cloud.x + 25, cloud.y - 20, 25, Math.PI * 1, Math.PI * 1.85);
+          ctx.arc(cloud.x + 50, cloud.y - 10, 20, Math.PI * 1.37, Math.PI * 1.91);
+          ctx.arc(cloud.x + 50, cloud.y + 10, 20, Math.PI * 1.5, Math.PI * 0.5);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        function drawBird(bird) {
+          ctx.fillStyle = "#000000";
+          ctx.beginPath();
+          ctx.moveTo(bird.x, bird.y);
+          ctx.bezierCurveTo(bird.x + 10, bird.y - 10, bird.x + 20, bird.y - 10, bird.x + 30, bird.y);
+          ctx.bezierCurveTo(bird.x + 20, bird.y + 10, bird.x + 10, bird.y + 10, bird.x, bird.y);
+          ctx.fill();
+        }
+
+        function drawLeaf(leaf) {
+          ctx.fillStyle = "#8B4513";
+          ctx.beginPath();
+          ctx.arc(leaf.x, leaf.y, 10, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
         function animate() {
           if (!gameActive) return;
 
@@ -327,8 +392,8 @@
             cat.velocity += gravity;
             cat.y += cat.velocity;
 
-            if (cat.y > canvas.height - 100) {
-              cat.y = canvas.height - 100;
+            if (cat.y > canvas.height - 70) {
+              cat.y = canvas.height - 70;
               cat.jumping = false;
               cat.velocity = 0;
             }
@@ -336,6 +401,15 @@
 
           // 고양이 그리기
           ctx.drawImage(catImg, cat.x, cat.y, cat.width, cat.height);
+
+          // 풀밭 그리기
+          grassOffset -= 2;
+          if (grassOffset < -canvas.width) {
+            grassOffset = 0;
+          }
+          ctx.fillStyle = "#228B22"; // 풀밭 색상
+          ctx.fillRect(grassOffset, canvas.height - grassHeight, canvas.width, grassHeight);
+          ctx.fillRect(grassOffset + canvas.width, canvas.height - grassHeight, canvas.width, grassHeight);
 
           // 장애물 생성 및 이동
           if (Math.random() < 0.02) {
@@ -365,8 +439,41 @@
             }
           });
 
-          // 화면 밖으로 나간 장애물 제거
+          // 구름 생성 및 이동
+          if (Math.random() < 0.01) {
+            createCloud();
+          }
+
+          clouds.forEach((cloud, index) => {
+            cloud.x -= 1;
+            drawCloud(cloud);
+          });
+
+          // 새 생성 및 이동
+          if (Math.random() < 0.005) {
+            createBird();
+          }
+
+          birds.forEach((bird, index) => {
+            bird.x -= 3;
+            drawBird(bird);
+          });
+
+          // 나뭇잎 생성 및 이동
+          if (Math.random() < 0.007) {
+            createLeaf();
+          }
+
+          leaves.forEach((leaf, index) => {
+            leaf.x -= 2;
+            drawLeaf(leaf);
+          });
+
+          // 화면 밖으로 나간 요소 제거
           obstacles = obstacles.filter((obs) => obs.x + obs.width > 0);
+          clouds = clouds.filter((cloud) => cloud.x + cloud.width > 0);
+          birds = birds.filter((bird) => bird.x + bird.width > 0);
+          leaves = leaves.filter((leaf) => leaf.x + leaf.width > 0);
 
           requestAnimationFrame(animate);
         }
@@ -374,6 +481,7 @@
         catImg.onload = startGame;
       </script>
     </main>
+    
     <!-- github giscus -->
     <div id="giscus">
       <script
