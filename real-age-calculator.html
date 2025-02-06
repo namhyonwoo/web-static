@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="정확한 만나이 계산기를 제공합니다. 생년월일을 입력하여 쉽고 빠르게 만나이를 계산하고, 만나이 계산 방법과 관련된 다양한 정보도 확인하세요.">
     <title>만나이 계산기 - 정확하고 빠른 만나이 계산 방법 제공</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* 추가적인 스타일 (선택 사항) */
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    </style>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 현재 날짜를 계산 기준일로 설정
             const today = new Date();
             const year = today.getFullYear();
@@ -56,99 +71,127 @@
             const birthMonthSelect = document.getElementById('birthMonth');
             const birthDaySelect = document.getElementById('birthDay');
 
-            birthYearSelect.addEventListener('change', function() {
+            birthYearSelect.addEventListener('change', function () {
                 document.getElementById('birthYearInput').value = this.value;
             });
 
-            birthMonthSelect.addEventListener('change', function() {
+            birthMonthSelect.addEventListener('change', function () {
                 document.getElementById('birthMonthInput').value = this.value;
             });
 
-            birthDaySelect.addEventListener('change', function() {
+            birthDaySelect.addEventListener('change', function () {
                 document.getElementById('birthDayInput').value = this.value;
             });
         });
     </script>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YMG06RBFS0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-YMG06RBFS0');
-</script>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">만 나이 계산</h2>
+<body class="bg-gray-100 font-sans ">
 
-        <p>만나이 계산기는 생년월일을 기준으로 현재까지의 만 나이를 계산해 주는 도구입니다. 복잡한 만나이 계산법을 몰라도 누구나 쉽고 빠르게 사용할 수 있습니다.</p>
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <nav class="container py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-semibold text-gray-800">인생유틸</a>
+                <ul class="flex space-x-6">
+                    <li><a href="/" class="text-gray-600 hover:text-gray-800">홈</a></li>
+                    <li><a href="/real-age-calculator.html" class="text-gray-600 hover:text-gray-800">만 나이 계산기</a></li>
+                    <!-- 추후 추가될 페이지를 위한 자리 -->
+                    <li><a href="#" class="text-gray-600 hover:text-gray-800">메뉴 3</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-gray-800">메뉴 4</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
-        <!-- 계산 기준일 -->
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="calculationDate">
-                계산 기준일:
-            </label>
-            <div class="flex items-center space-x-2">
-                <span id="currentYear"></span>년
-                <span id="currentMonth"></span>월
-                <span id="currentDay"></span>일
+    <main class="container py-12 flex items-center justify-center h-screen">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-6 text-center">만 나이 계산</h2>
+
+            <p>만나이 계산기는 생년월일을 기준으로 현재까지의 만 나이를 계산해 주는 도구입니다. 복잡한 만나이 계산법을 몰라도 누구나 쉽고 빠르게 사용할 수 있습니다.</p>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="calculationDate">
+                    계산 기준일:
+                </label>
+                <div class="flex items-center space-x-2">
+                    <span id="currentYear"></span>년
+                    <span id="currentMonth"></span>월
+                    <span id="currentDay"></span>일
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="birthYear">
+                    본인 생일:
+                </label>
+                <div class="flex space-x-2">
+                    <select id="birthYear"
+                        class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">년</option>
+                        <script>
+                            const currentYear = new Date().getFullYear();
+                            for (let i = currentYear; i >= 1900; i--) {
+                                document.write(`<option value="${i}">${i}년</option>`);
+                            }
+                        </script>
+                    </select>
+                    <select id="birthMonth"
+                        class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">월</option>
+                        <script>
+                            for (let i = 1; i <= 12; i++) {
+                                document.write(`<option value="${i}">${i}월</option>`);
+                            }
+                        </script>
+                    </select>
+                    <select id="birthDay"
+                        class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">일</option>
+                        <script>
+                            for (let i = 1; i <= 31; i++) {
+                                document.write(`<option value="${i}">${i}일</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+                <div class="flex space-x-2 mt-2">
+                    <input type="number" id="birthYearInput" placeholder="년"
+                        class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <input type="number" id="birthMonthInput" placeholder="월"
+                        class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <input type="number" id="birthDayInput" placeholder="일"
+                        class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <p class="text-gray-600 text-xs italic">* 주민등록상 생년월일을 기준으로 합니다.</p>
+            </div>
+            <div class="flex items-center justify-between">
+                <button id="calculateButton"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="button">
+                    계산
+                </button>
+            </div>
+            <div class="mt-6">
+                <p class="text-gray-700 font-bold">결과:</p>
+                <p id="result" class="text-lg"></p>
             </div>
         </div>
+    </main>
 
-        <!-- 본인 생일 -->
-        <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="birthYear">
-                본인 생일:
-            </label>
-            <div class="flex space-x-2">
-                <select id="birthYear" class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">년</option>
-                    <script>
-                        const currentYear = new Date().getFullYear();
-                        for (let i = currentYear; i >= 1900; i--) {
-                            document.write(`<option value="${i}">${i}년</option>`);
-                        }
-                    </script>
-                </select>
-                <select id="birthMonth" class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">월</option>
-                    <script>
-                        for (let i = 1; i <= 12; i++) {
-                            document.write(`<option value="${i}">${i}월</option>`);
-                        }
-                    </script>
-                </select>
-                <select id="birthDay" class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">일</option>
-                    <script>
-                        for (let i = 1; i <= 31; i++) {
-                            document.write(`<option value="${i}">${i}일</option>`);
-                        }
-                    </script>
-                </select>
-            </div>
-            <div class="flex space-x-2 mt-2">
-                <input type="number" id="birthYearInput" placeholder="년" class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <input type="number" id="birthMonthInput" placeholder="월" class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <input type="number" id="birthDayInput" placeholder="일" class="shadow appearance-none border rounded w-1/3 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
-            <p class="text-gray-600 text-xs italic">* 주민등록상 생년월일을 기준으로 합니다.</p>
-        </div>
 
-        <!-- 계산 버튼 -->
-        <div class="flex items-center justify-between">
-            <button id="calculateButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                계산
-            </button>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container text-center">
+            <p>&copy; 2024 나의 웹사이트. All rights reserved.</p>
+            <p>
+                <a href="/privacy" class="text-gray-300 hover:text-white">개인정보처리방침</a> |
+                <a href="/terms" class="text-gray-300 hover:text-white">이용약관</a> |
+                <a href="/contact" class="text-gray-300 hover:text-white">문의하기</a>
+            </p>
         </div>
+    </footer>
 
-        <!-- 결과 -->
-        <div class="mt-6">
-            <p class="text-gray-700 font-bold">결과:</p>
-            <p id="result" class="text-lg"></p>
-        </div>
-    </div>
 </body>
+
 </html>
