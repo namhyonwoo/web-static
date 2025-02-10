@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home page -->
+  <url>
+    <loc>https://namhyonwoo.github.io/index.html</loc>
+    <lastmod>2024-05-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Real Age Calculator -->
+  <url>
+    <loc>https://namhyonwoo.github.io/real-age-calculator.html</loc>
+    <lastmod>2024-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- BMI Calculator -->
+  <url>
+    <loc>https://namhyonwoo.github.io/bmi-calculator.html</loc>
+    <lastmod>2024-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Date Calculator -->
+  <url>
+    <loc>https://namhyonwoo.github.io/date-calculator.html</loc>
+    <lastmod>2024-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+    <!-- Contact page -->
+  <url>
+    <loc>https://namhyonwoo.github.io/contact.html</loc>
+    <lastmod>2024-05-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Terms of Service page -->
+  <url>
+    <loc>https://namhyonwoo.github.io/asset/terms.html</loc>
+    <lastmod>2024-05-22</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>
